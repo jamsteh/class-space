@@ -36,7 +36,6 @@ def compassMFA(safariDriver):
     print("clicked duo call button")
 
 def compassTermSelect(safariDriver):
-    # fieldset - role="form"
     # term-go - submit button ID
     # termForm = safariDriver.find_element_by_xpath("//fieldset@[role='form']")
     # s2id_autogen1_search
@@ -45,9 +44,9 @@ def compassTermSelect(safariDriver):
     termFieldLink.click()
     termField = safariDriver.find_element_by_id("s2id_autogen1_search")
     termField.send_keys("Fall 2021 - College Station")
-    time.sleep(3)
+    time.sleep(2)
     termField.send_keys(Keys.ENTER)
-
+    time.sleep(2)
     submitButton = safariDriver.find_element_by_id("term-go")
     submitButton.click()
     print("selected term")
@@ -78,32 +77,29 @@ def compassTableScrape(safariDriver):
     time.sleep(3)
     print("found aero courses")
     numRows = len(safariDriver.find_elements_by_xpath("//*[@id='table1']/tbody/tr"))
-    # AERO - //*[@id="table1"]/tbody/tr[1]/td[3]
-    # //*[@id="table1"]/tbody/tr[1]/td[11]/span[1]
-    # //*[@id="table1"]/tbody/tr[1]/td[11]/span[1]/span[2]
-    # //*[@id="table1"]/tbody/tr[2]/td[11]/span[2]/span[2]
-    # //*[@id="table1"]/tbody/tr[5]/td[11]/span[1]/span[2]
-    # //*[@id="table1"]/tbody/tr[2]/td[11]/span[3]
     safariDriver.implicitly_wait(0)
     print("----------------------------")
     for rowIndex in range(1, numRows):
-        subject = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[3]").text
-        courseNumber = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[4]").text
-        instructor = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[7]").find_element_by_css_selector("a.email").text
         try:
-            occupiedSeats = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[11]/span[1]/span[2]").text
-            maxSeats = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[11]/span[2]/span[2]").text
+            subject = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[3]").text
+            courseNumber = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[4]").text
+            instructor = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[7]").find_element_by_css_selector("a.email").text
+            try:
+                occupiedSeats = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[11]/span[1]/span[2]").text
+                maxSeats = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[11]/span[2]/span[2]").text
+            except Exception:
+                occupiedSeats = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[11]/span[2]/span[2]").text
+                maxSeats = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[11]/span[3]/span[2]").text
+                
+            outputClassSpace(subject, courseNumber, instructor, occupiedSeats, maxSeats)
         except Exception:
-            occupiedSeats = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[11]/span[2]").text.split(" ")[1]
-            maxSeats = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[11]/span[3]").text.split(" ")[1]
-            
-        outputClassSpace(subject, courseNumber, instructor, occupiedSeats, maxSeats)
+            pass
 
 def outputClassSpace(subject, courseNumber, instructor, occupiedSeats, maxSeats):
     if (occupiedSeats < maxSeats):
-        print(f"{bcolors.OKGREEN}{subject} {courseNumber} | {instructor} | {occupiedSeats}/{maxSeats}")
+        print(f"{bcolors.OKGREEN}{subject : <4} {courseNumber : <3} | {instructor : <30} | {occupiedSeats : >3}/{maxSeats : <3}")
         return
-    print(f"{bcolors.FAIL}{subject} {courseNumber} | {instructor} | {occupiedSeats}/{maxSeats}")
+    print(f"{bcolors.FAIL}{subject : <4} {courseNumber : <3} | {instructor : <30} | {occupiedSeats : >3}/{maxSeats : <3}")
 
     
 
