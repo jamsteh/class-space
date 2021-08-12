@@ -101,7 +101,12 @@ def outputClassSpace(subject, courseNumber, instructor, occupiedSeats, maxSeats)
     
 
 def main():
-    chromeDriver = webdriver.Chrome()
+    chrome_options = webdriver.ChromeOptions()
+    chrome_options.add_argument('--headless')
+    chrome_options.add_argument('--no-sandbox')
+    chrome_options.add_argument('--disable-dev-shm-usage')
+
+    chromeDriver = webdriver.Chrome(chrome_options=chrome_options)
     chromeDriver.set_window_position(0,0)
     chromeDriver.set_window_size(1500,800)
     chromeDriver.implicitly_wait(10)
