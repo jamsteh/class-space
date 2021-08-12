@@ -4,7 +4,7 @@ import json
 import time
 from bcolors import bcolors
 
-def compassLogin(safariDriver):
+def compassLogin(chromeDriver):
     with open(file = "login.json", mode = 'r') as rawLogin:
         login = json.loads(str(rawLogin.read()))
 
@@ -12,12 +12,12 @@ def compassLogin(safariDriver):
     password = login['password']
     print("retrieved username and password from store")
 
-    safariDriver.get("https://compassxe-ssb.tamu.edu/StudentRegistrationSsb/ssb/term/termSelection?mode=authsearch")
+    chromeDriver.get("https://compassxe-ssb.tamu.edu/StudentRegistrationSsb/ssb/term/termSelection?mode=authsearch")
     print("arrived at howdy login")
 
     time.sleep(1)
-    usernameField = safariDriver.find_element_by_id("username")
-    passwordField = safariDriver.find_element_by_id("password")
+    usernameField = chromeDriver.find_element_by_id("username")
+    passwordField = chromeDriver.find_element_by_id("password")
     print("found username and password fields")
 
     usernameField.send_keys(username)
@@ -26,67 +26,67 @@ def compassLogin(safariDriver):
     passwordField.submit()
     print("submitted username and password fields")
 
-    # submitButton = safariDriver.find_element_by_name()
+    # submitButton = chromeDriver.find_element_by_name()
 
-def compassMFA(safariDriver):
-    phoneRowLabel = safariDriver.find_element_by_css_selector("div.row-label.phone-label")
+def compassMFA(chromeDriver):
+    phoneRowLabel = chromeDriver.find_element_by_css_selector("div.row-label.phone-label")
     callButton = phoneRowLabel.find_element_by_css_selector("button.auth-button.positive")
 
     callButton.click()
     print("clicked duo call button")
 
-def compassTermSelect(safariDriver):
+def compassTermSelect(chromeDriver):
     # term-go - submit button ID
-    # termForm = safariDriver.find_element_by_xpath("//fieldset@[role='form']")
+    # termForm = chromeDriver.find_element_by_xpath("//fieldset@[role='form']")
     # s2id_autogen1_search
     # click on element first to let s2id_autogen1_search become fillable
-    termFieldLink = safariDriver.find_element_by_css_selector("a.select2-choice")
+    termFieldLink = chromeDriver.find_element_by_css_selector("a.select2-choice")
     termFieldLink.click()
-    termField = safariDriver.find_element_by_id("s2id_autogen1_search")
+    termField = chromeDriver.find_element_by_id("s2id_autogen1_search")
     termField.send_keys("Fall 2021 - College Station")
     time.sleep(2)
     termField.send_keys(Keys.ENTER)
     time.sleep(2)
-    submitButton = safariDriver.find_element_by_id("term-go")
+    submitButton = chromeDriver.find_element_by_id("term-go")
     submitButton.click()
     print("selected term")
 
-def compassClassSelect(safariDriver):
+def compassClassSelect(chromeDriver):
     # submit button id: search-go
     # subject input id: s2id_autogen1
     print("searching aero courses...")
-    subjectField = safariDriver.find_element_by_id("s2id_autogen1")
+    subjectField = chromeDriver.find_element_by_id("s2id_autogen1")
     subjectField.click()
     subjectField.send_keys("AERO - Aerospace Engineering")
     time.sleep(3)
     subjectField.send_keys(Keys.ENTER)    
 
-    rangeField = safariDriver.find_element_by_id("txt_course_number_range")
-    rangeFieldTo = safariDriver.find_element_by_id("txt_course_number_range_to")
+    rangeField = chromeDriver.find_element_by_id("txt_course_number_range")
+    rangeFieldTo = chromeDriver.find_element_by_id("txt_course_number_range_to")
 
     rangeField.send_keys("400")
     rangeFieldTo.send_keys("500")
 
-    submitButton = safariDriver.find_element_by_id("search-go")
+    submitButton = chromeDriver.find_element_by_id("search-go")
     time.sleep(3)
     submitButton.click()
 
-def compassTableScrape(safariDriver):
-    numRows = len(safariDriver.find_elements_by_xpath("//*[@id='table1']/tbody/tr"))
+def compassTableScrape(chromeDriver):
+    numRows = len(chromeDriver.find_elements_by_xpath("//*[@id='table1']/tbody/tr"))
     print(f"found aero courses ({numRows})")
-    safariDriver.implicitly_wait(0)
+    chromeDriver.implicitly_wait(0)
     print("----------------------------")
     for rowIndex in range(1, numRows):
         try:
-            subject = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[3]").text
-            courseNumber = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[4]").text
-            instructor = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[7]").find_element_by_css_selector("a.email").text
+            subject = chromeDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[3]").text
+            courseNumber = chromeDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[4]").text
+            instructor = chromeDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[7]").find_element_by_css_selector("a.email").text
             try:
-                occupiedSeats = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[11]/span[1]/span[2]").text
-                maxSeats = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[11]/span[2]/span[2]").text
+                occupiedSeats = chromeDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[11]/span[1]/span[2]").text
+                maxSeats = chromeDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[11]/span[2]/span[2]").text
             except Exception:
-                occupiedSeats = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[11]/span[2]/span[2]").text
-                maxSeats = safariDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[11]/span[3]/span[2]").text
+                occupiedSeats = chromeDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[11]/span[2]/span[2]").text
+                maxSeats = chromeDriver.find_element_by_xpath(f"//*[@id='table1']/tbody/tr[{rowIndex}]/td[11]/span[3]/span[2]").text
                 
             outputClassSpace(subject, courseNumber, instructor, occupiedSeats, maxSeats)
         except Exception:
@@ -101,22 +101,22 @@ def outputClassSpace(subject, courseNumber, instructor, occupiedSeats, maxSeats)
     
 
 def main():
-    safariDriver = webdriver.Safari()
-    safariDriver.set_window_position(0,0)
-    safariDriver.set_window_size(1500,800)
-    safariDriver.implicitly_wait(10)
-    compassLogin(safariDriver)
+    chromeDriver = webdriver.Chrome()
+    chromeDriver.set_window_position(0,0)
+    chromeDriver.set_window_size(1500,800)
+    chromeDriver.implicitly_wait(10)
+    compassLogin(chromeDriver)
     time.sleep(2)
-    mainWindow = safariDriver.current_window_handle
-    safariDriver.switch_to.frame("duo_iframe")
-    compassMFA(safariDriver)
-    safariDriver.switch_to.window(mainWindow)
+    mainWindow = chromeDriver.current_window_handle
+    chromeDriver.switch_to.frame("duo_iframe")
+    compassMFA(chromeDriver)
+    chromeDriver.switch_to.window(mainWindow)
     time.sleep(10)
-    compassTermSelect(safariDriver)
+    compassTermSelect(chromeDriver)
     time.sleep(1)
-    compassClassSelect(safariDriver)
+    compassClassSelect(chromeDriver)
     time.sleep(1)
-    compassTableScrape(safariDriver)
+    compassTableScrape(chromeDriver)
 
 if __name__ == "__main__":
     main()
