@@ -22,5 +22,8 @@ jobs:
         pip install pipenv
         pipenv install
     - name: Run job
+      env:
+        USERNAME: ${{ secrets.USERNAME }}
+        PASSWORD: ${{ secrets.PASSWORD }}
       run: |
         pipenv run python class-space.py
