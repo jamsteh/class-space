@@ -22,7 +22,7 @@ def compassLogin(safariDriver):
 
     usernameField.send_keys(username)
     passwordField.send_keys(password)
-    time.sleep(4)
+    time.sleep(1)
     passwordField.submit()
     print("submitted username and password fields")
 
@@ -59,9 +59,7 @@ def compassClassSelect(safariDriver):
     subjectField.click()
     subjectField.send_keys("AERO - Aerospace Engineering")
     time.sleep(3)
-    subjectField.send_keys(Keys.ENTER)
-    time.sleep(3)
-    
+    subjectField.send_keys(Keys.ENTER)    
 
     rangeField = safariDriver.find_element_by_id("txt_course_number_range")
     rangeFieldTo = safariDriver.find_element_by_id("txt_course_number_range_to")
@@ -74,9 +72,8 @@ def compassClassSelect(safariDriver):
     submitButton.click()
 
 def compassTableScrape(safariDriver):
-    time.sleep(3)
-    print("found aero courses")
     numRows = len(safariDriver.find_elements_by_xpath("//*[@id='table1']/tbody/tr"))
+    print(f"found aero courses ({numRows})")
     safariDriver.implicitly_wait(0)
     print("----------------------------")
     for rowIndex in range(1, numRows):
@@ -109,16 +106,16 @@ def main():
     safariDriver.set_window_size(1500,800)
     safariDriver.implicitly_wait(10)
     compassLogin(safariDriver)
-    time.sleep(5)
+    time.sleep(2)
     mainWindow = safariDriver.current_window_handle
     safariDriver.switch_to.frame("duo_iframe")
     compassMFA(safariDriver)
     safariDriver.switch_to.window(mainWindow)
     time.sleep(10)
     compassTermSelect(safariDriver)
-    time.sleep(10)
+    time.sleep(1)
     compassClassSelect(safariDriver)
-    time.sleep(10)
+    time.sleep(1)
     compassTableScrape(safariDriver)
 
 if __name__ == "__main__":
