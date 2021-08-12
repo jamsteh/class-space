@@ -21,3 +21,7 @@ jobs:
       run: |
         pip install pipenv
         pipenv install
+    - name: Run job
+      run: |
+        pipenv shell
+        python class-space.py
