@@ -2,14 +2,12 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import json
 import time
+import os
 from bcolors import bcolors
 
 def compassLogin(chromeDriver):
-    with open(file = "login.json", mode = 'r') as rawLogin:
-        login = json.loads(str(rawLogin.read()))
-
-    username = login['username']
-    password = login['password']
+    username = os.environ.get('USERNAME')
+    password = os.environ.get('PASSWORD')
     print("retrieved username and password from store")
 
     chromeDriver.get("https://compassxe-ssb.tamu.edu/StudentRegistrationSsb/ssb/term/termSelection?mode=authsearch")
