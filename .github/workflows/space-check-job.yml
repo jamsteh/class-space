@@ -1,0 +1,26 @@
+name: Space checking job
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.7
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.7
+    - name: Install Chrome
+      run: |
+        chmod +x ./scripts/installChrome.sh
+        ./scripts/installChrome.sh
+    - name: Install Python dependencies
+      run: |
+        pip install pipenv
+        pipenv install
+    - name: Run job
+      run: |
+        pipenv run python class-space.py
